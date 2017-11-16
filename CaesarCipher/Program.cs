@@ -14,7 +14,10 @@ namespace CaesarCipher
             //Console.WriteLine(StringExtensions.Let2nat('a'));
             //Console.WriteLine(StringExtensions.Nat2let(0));
             //Console.WriteLine(StringExtensions.Shift(3, 'z'));
-            Console.WriteLine(StringExtensions.Encode(3, "haskell is fun"));
+            //Console.WriteLine(StringExtensions.Encode(3, "haskell is fun"));
+            //Console.WriteLine(StringExtensions.Decode(3, "kdvnhoo lv ixq"));
+            //Console.WriteLine(StringExtensions.Lowers("haskell is fun"));
+            //Console.WriteLine(StringExtensions.Count('s',"haskell is fun"));
 
         }
     }
@@ -69,6 +72,7 @@ namespace CaesarCipher
             // Otherwise
             return Nat2let(Let2nat(c) - i);
         }
+        // Encodes a given string
         public static String Encode(int i, String s)
         {
             String result = "";
@@ -76,6 +80,37 @@ namespace CaesarCipher
                 result += Shift(i, c);
 
             return result;
+        }
+        // Decodes a given string
+        public static String Decode(int i, String s)
+        {
+            String result = "";
+            foreach (char c in s)
+                result += Unshift(i, c);
+
+            return result;
+        }
+        public static int Lowers(String s)
+        {
+            int i = 0;
+            foreach (char c in s)
+            {
+                if (Char.IsLower(c))
+                    i++;
+            }
+
+            return i;
+        }
+        public static int Count(char c, String s)
+        {
+            int i = 0;
+            foreach (char l in s)
+            {
+                if (c == l)
+                    i++;
+            }
+
+            return i;
         }
     }
 }
