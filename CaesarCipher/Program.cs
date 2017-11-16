@@ -1,7 +1,7 @@
 ﻿// Nicholas Espinosa
 // COP 4020
 // C# Caesar Cipher
-
+// Boop
 using System;
 
 namespace CaesarCipher
@@ -10,7 +10,7 @@ namespace CaesarCipher
     {
         static void Main(string[] args)
         {
-        
+
         }
     }
     public static class StringExtensions
@@ -127,6 +127,38 @@ namespace CaesarCipher
                 freq[i] = Percent(Count(Nat2let(i), word), Lowers(word));
 
             return freq;
+        }
+
+        public static String Rotate(int amt, String word)
+        {
+            for (int i = 0; i < amt; i++)
+            {
+                word = word.Substring(1) + word.Substring(0, 1);
+            }
+
+            return word;
+        }
+        public static int Position(float value, float[] input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (value == input[i])
+                    return i;
+
+            }
+            return -1;
+        }
+
+        public static float Chisqr(float[] input)
+        {
+            float chisqr = 0.0f;
+
+            for (int i = 0; i < 26; i++)
+            {
+                chisqr += (float)Math.Pow(input[i] - table[i], 2.0f)/table[i];
+            }
+
+            return chisqr;
         }
     }
 }
