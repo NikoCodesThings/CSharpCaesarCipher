@@ -1,5 +1,7 @@
-﻿// Hello, this is Nick
-// Boop
+﻿// Nicholas Espinosa
+// COP 4020
+// C# Caesar Cipher
+
 using System;
 
 namespace CaesarCipher
@@ -8,27 +10,6 @@ namespace CaesarCipher
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Hello World!");
-            //Console.WriteLine(StringExtensions.Boop());
-            //StringExtensions.Cracked("Hello!");
-            //Console.WriteLine(StringExtensions.Let2nat('a'));
-            //Console.WriteLine(StringExtensions.Nat2let(0));
-            //Console.WriteLine(StringExtensions.Shift(3, 'z'));
-            //Console.WriteLine(StringExtensions.Encode(3, "haskell is fun"));
-            //Console.WriteLine(StringExtensions.Decode(3, "kdvnhoo lv ixq"));
-            //Console.WriteLine(StringExtensions.Lowers("haskell is fun"));
-            //Console.WriteLine(StringExtensions.Count('s',"haskell is fun"));
-            //int count = StringExtensions.Count('s', "haskell is fun");
-            //int total = StringExtensions.Lowers("haskell is fun");
-            //Console.WriteLine(StringExtensions.Percent(count, total));
-            float[] freq = StringExtensions.Freqs("haskell is fun");
-            for(int i = 0; i < 26; i++)
-            {
-                if (i == 25)
-                    Console.Write(freq[i] + "\n");
-                else
-                    Console.Write(freq[i] + ", "); 
-            }
         
         }
     }
@@ -101,22 +82,27 @@ namespace CaesarCipher
 
             return result;
         }
+        // Determines the number of lowercase characters in a string
         public static int Lowers(String s)
         {
             int i = 0;
             foreach (char c in s)
             {
+                // Only increment if a lower case string is found
                 if (Char.IsLower(c))
                     i++;
             }
 
             return i;
         }
+        
+        // Determines the number of a certain character within a string
         public static int Count(char c, String s)
         {
             int i = 0;
             foreach (char l in s)
             {
+                // Only increment if the caracter is found
                 if (c == l)
                     i++;
             }
@@ -124,15 +110,19 @@ namespace CaesarCipher
             return i;
         }
 
+        // Determines the percentage of which a character makes up in a String
         public static float Percent(int count, int total)
         {
             return 100f * ((float)count / (float)total);
         }
 
+        // Creates a list that shows the frequencies of each letter in a string
         public static float[] Freqs(String word)
         {
+            // Created the array
             float[] freq = new float[26];
 
+            // Determining the frequency for each letter
             for (int i = 0; i < 26; i++)
                 freq[i] = Percent(Count(Nat2let(i), word), Lowers(word));
 
