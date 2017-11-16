@@ -18,7 +18,18 @@ namespace CaesarCipher
             //Console.WriteLine(StringExtensions.Decode(3, "kdvnhoo lv ixq"));
             //Console.WriteLine(StringExtensions.Lowers("haskell is fun"));
             //Console.WriteLine(StringExtensions.Count('s',"haskell is fun"));
-
+            //int count = StringExtensions.Count('s', "haskell is fun");
+            //int total = StringExtensions.Lowers("haskell is fun");
+            //Console.WriteLine(StringExtensions.Percent(count, total));
+            float[] freq = StringExtensions.Freqs("haskell is fun");
+            for(int i = 0; i < 26; i++)
+            {
+                if (i == 25)
+                    Console.Write(freq[i] + "\n");
+                else
+                    Console.Write(freq[i] + ", "); 
+            }
+        
         }
     }
     public static class StringExtensions
@@ -111,6 +122,21 @@ namespace CaesarCipher
             }
 
             return i;
+        }
+
+        public static float Percent(int count, int total)
+        {
+            return 100f * ((float)count / (float)total);
+        }
+
+        public static float[] Freqs(String word)
+        {
+            float[] freq = new float[26];
+
+            for (int i = 0; i < 26; i++)
+                freq[i] = Percent(Count(Nat2let(i), word), Lowers(word));
+
+            return freq;
         }
     }
 }
