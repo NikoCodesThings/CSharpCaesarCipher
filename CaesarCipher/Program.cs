@@ -3,6 +3,7 @@
 // C# Caesar Cipher
 // Boop
 using System;
+using System.Text;
 
 namespace CaesarCipher
 {
@@ -10,7 +11,16 @@ namespace CaesarCipher
     {
         static void Main(string[] args)
         {
-
+            String encodedWord = StringExtensions.Encode(3, "haskell is fun");
+            //Console.WriteLine(StringExtensions.Rotate(3, "haskell is fun"));
+            float[] list = StringExtensions.Chilist("haskell is fun");
+            //Console.WriteLine(encodedWord);
+            //String decodedWord = StringExtensions.Decode(3, encodedWord);
+            //Console.WriteLine(decodedWord);
+            //StringExtensions.Cracked(encodedWord);
+            //char l = StringExtensions.Nat2let((StringExtensions.Let2nat('c') - 3 + 26) % 26);
+            //char m = StringExtensions.Unshift(3, 'c');
+            //Console.WriteLine(l + " " + m);
         }
     }
     public static class StringExtensions
@@ -19,16 +29,6 @@ namespace CaesarCipher
         static float[] table = {8.2f, 1.5f, 2.8f, 4.3f, 12.7f, 2.2f, 2.0f, 6.1f, 7.0f, 0.2f, 0.8f, 4.0f,
             2.4f, 6.7f, 7.5f, 1.9f, 0.1f, 6.0f, 6.3f, 9.1f, 2.8f, 1.0f, 2.4f, 0.2f, 2.0f, 0.1f};
 
-        // Tester function
-        public static String Boop()
-        {
-            return "Boop!";
-        }
-        // Function that will be called
-        public static void Cracked(String input)
-        {
-            Console.WriteLine("Found the crack");
-        }
         // Given a character, return a number
         public static int Let2nat(char c)
         {
@@ -59,7 +59,7 @@ namespace CaesarCipher
 
             // If the character exceeds the lowercase letters
             if (Let2nat(c) - i < 0)
-                return Nat2let((Let2nat(c) - i) % 26);
+                return Nat2let((Let2nat(c) - i + 26) % 26);
 
             // Otherwise
             return Nat2let(Let2nat(c) - i);
@@ -67,20 +67,23 @@ namespace CaesarCipher
         // Encodes a given string
         public static String Encode(int i, String s)
         {
-            String result = "";
+            StringBuilder sb = new StringBuilder("");
             foreach (char c in s)
-                result += Shift(i, c);
+                sb.Append(Shift(i, c));
 
-            return result;
+            return sb.ToString();
         }
         // Decodes a given string
         public static String Decode(int i, String s)
         {
+            StringBuilder sb = new StringBuilder("");
             String result = "";
             foreach (char c in s)
-                result += Unshift(i, c);
+            {
+                sb.Append(Unshift(i, c));
+            }
 
-            return result;
+            return sb.ToString();
         }
         // Determines the number of lowercase characters in a string
         public static int Lowers(String s)
@@ -129,26 +132,37 @@ namespace CaesarCipher
             return freq;
         }
 
+        // Rotates a string a given number of spaces
         public static String Rotate(int amt, String word)
         {
             for (int i = 0; i < amt; i++)
-            {
                 word = word.Substring(1) + word.Substring(0, 1);
-            }
 
             return word;
         }
+        // Finds the position of the given value
         public static int Position(float value, float[] input)
         {
             for (int i = 0; i < input.Length; i++)
             {
                 if (value == input[i])
                     return i;
-
             }
             return -1;
         }
+        public static float GetMin(float[] input)
+        {
+            float test = float.MaxValue;
 
+            foreach (float f in input)
+            {
+                if (f < test)
+                    test = f;
+            }
+            return test;
+        }
+
+        // Calculates the chisqr function
         public static float Chisqr(float[] input)
         {
             float chisqr = 0.0f;
@@ -159,6 +173,32 @@ namespace CaesarCipher
             }
 
             return chisqr;
+        }
+
+        public static float[] Chilist(String word)
+        {
+            float[] chilist = new float[26];
+
+            for (int i = 0; i < 26; i++)
+            {
+                chilist[i] = Chisqr(Freqs(Rotate(i, word)));
+                Console.WriteLine(Rotate(i, word) + " " + Chisqr(Freqs(Rotate(i, word))));
+            }
+
+            return chilist;
+        }
+
+        public static void Cracked(String word)
+        {
+            float[] chilist = Chilist(word);
+            int shiftAmt = Position(GetMin(chilist), chilist);
+            for (int i = 0; i < 26; i++)
+            {
+                    Console.Write(chilist[i] + " ");
+            }
+            Console.WriteLine(shiftAmt);
+            String result = Decode(shiftAmt, word);
+            Console.WriteLine(result);
         }
     }
 }
