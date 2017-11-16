@@ -14,6 +14,7 @@ namespace CaesarCipher
             //Console.WriteLine(StringExtensions.Let2nat('a'));
             //Console.WriteLine(StringExtensions.Nat2let(0));
             //Console.WriteLine(StringExtensions.Shift(3, 'z'));
+            Console.WriteLine(StringExtensions.Encode(3, "haskell is fun"));
 
         }
     }
@@ -55,6 +56,26 @@ namespace CaesarCipher
 
             // Otherwise
             return Nat2let(Let2nat(c) + i);
+        }
+        public static char Unshift(int i, char c)
+        {
+            if (!Char.IsLower(c))
+                return c;
+
+            // If the character exceeds the lowercase letters
+            if (Let2nat(c) - i < 0)
+                return Nat2let((Let2nat(c) - i) % 26);
+
+            // Otherwise
+            return Nat2let(Let2nat(c) - i);
+        }
+        public static String Encode(int i, String s)
+        {
+            String result = "";
+            foreach (char c in s)
+                result += Shift(i, c);
+
+            return result;
         }
     }
 }
