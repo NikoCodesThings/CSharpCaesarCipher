@@ -11,22 +11,6 @@ namespace CaesarCipher
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine(StringExtensions.Let2Nat('z'));
-            //Console.WriteLine(StringExtensions.Nat2Let(25));
-            //Console.WriteLine(StringExtensions.Shift(3, 'z'));
-            //Console.WriteLine(StringExtensions.Encode(3, "haskell is fun"));
-            //Console.WriteLine(StringExtensions.Decode(3, "kdvnhoo lv ixq"));
-            //Console.WriteLine(StringExtensions.Lowers("haskell is fun"));
-            //Console.WriteLine(StringExtensions.Count('s', "haskell is fun"));
-            //int count = StringExtensions.Count('s', "haskell is fun");
-            //int lowers = StringExtensions.Lowers("haskell is fun");
-            //Console.WriteLine(StringExtensions.Percent(count, lowers));
-            String word = "haskell is fun";
-            float[] freqs = StringExtensions.Freqs(StringExtensions.Rotate(3, word));
-            /*for (int i = 0; i < 26; i++)
-                Console.WriteLine(freqs[i]);*/
-            //Console.WriteLine(StringExtensions.Rotate(3, "haskell is fun"));
-            Console.WriteLine(StringExtensions.Chisqr(freqs));
 
         }
     }
@@ -129,12 +113,18 @@ namespace CaesarCipher
             return freqs;
         }
         // Recursively rotates a string by a given amount
-        public static String Rotate(int amt, String word)
+        public static float[] Rotate(int amt, float[] array)
         {
-            if (amt == 0)
-                return word;
+            float[] newArray = new float[array.Length];
+            Array.Copy(array, newArray, array.Length);
+            for(int i = 0; i < amt; i++)
+            {
+                float temp = newArray[0];
+                Array.Copy(newArray, 1, newArray, 0, array.Length - 1);
+                newArray[newArray.Length - 1] = temp;
+            }
 
-            return Rotate(amt - 1, word.Substring(1) + word.Substring(0, 1));
+            return newArray;
         }
 
         // Calculates the chisqr value from a given float array
@@ -143,9 +133,25 @@ namespace CaesarCipher
             float chisqr = 0.0f;
 
             for (int i = 0; i < 26; i++)
-                chisqr += (float)Math.Pow((double)input[i] - (double)table[i], 2.0) / table[i];
+            {
+                float square = (input[i] - table[i]) * (input[i] - table[i]);
+                chisqr += square / table[i];
+            }
 
             return chisqr;
+        }
+        // Returns the lowest float value found
+        public static float GetMin(float[] input)
+        {
+            float min = float.MaxValue;
+
+            for (int i = 0; i < 26; i++)
+            {
+                if (input[i] < min)
+                    min = input[i];
+            }
+
+            return min;
         }
         // Determines the position of a value, if nothing is found, then -1 is returned
         public static int Position(float value, float[] array)
@@ -156,6 +162,33 @@ namespace CaesarCipher
                     return i;
             }
             return -1;
+        }
+
+        // List of chisqr values is generated
+        public static float[] ChiSqrList(float[] input)
+        {
+            float[] chilist = new float[input.Length];
+
+            for (int i = 0; i < chilist.Length; i++)
+                chilist[i] = Chisqr(Rotate(i, input));
+
+            return chilist;
+        }
+
+        // Cracks the Caesar Cipher
+        public static void Cracked(String word)
+        {
+            // Determine the letter frequencies
+            float[] letterFreqs = Freqs(word);
+            
+            // Determine the chisqr values of each rotation
+            float[] chilist = ChiSqrList(letterFreqs);
+
+            // Determine the shift amount
+            int shiftAmt = Position(GetMin(chilist), chilist);
+
+            // Print out the results
+            Console.WriteLine(Decode(shiftAmt, word));
         }
     }
 }
